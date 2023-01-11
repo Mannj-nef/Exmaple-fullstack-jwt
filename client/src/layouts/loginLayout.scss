@@ -1,0 +1,54 @@
+.login,
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .logo {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .title-login,
+    .title-register,
+    .description {
+        color: var(--text-color);
+        font-size: 62px;
+        font-weight: 400;
+        line-height: 80px;
+    }
+    .description {
+        margin-top: 39px;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 400;
+    }
+    .title-bottom {
+        margin-top: 15px;
+        margin-left: auto;
+
+        .to-register,
+        .to-login {
+            cursor: pointer;
+            text-decoration: underline;
+            color: var(--primary-color);
+        }
+    }
+    .btn-login,
+    .btn-register {
+        --color-green: #46c366;
+        padding: 15px;
+        margin-top: 35px;
+        width: 100%;
+        background-color: var(--color-green);
+        color: var(--white-color);
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 20px;
+        text-transform: capitalize;
+    }
+}
