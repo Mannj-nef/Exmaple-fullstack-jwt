@@ -9,7 +9,11 @@ interface Ifrom {
 
 const Form = ({ children, className, handleSubmit }: Ifrom) => {
   return (
-    <form className={`form-control ${className}`} onSubmit={handleSubmit}>
+    <form
+      autoComplete="off"
+      className={`form-control ${className}`}
+      onSubmit={handleSubmit}
+    >
       {children}
     </form>
   );

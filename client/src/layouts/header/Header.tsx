@@ -4,8 +4,19 @@ import CartLogo from "../../components/logos/CartLogo";
 import Button from "../../components/button/Button";
 import "./header.scss";
 import { ROUTER_PATH } from "../../routers/router";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useEffect } from "react";
+import { getUser } from "../../redux/users/userSlice";
 
 const Header = () => {
+  const { user } = useSelector((state: RootState) => state.userSlice);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
   const navigate = useNavigate();
   return (
     <div className="header">
@@ -31,15 +42,25 @@ const Header = () => {
         </ul>
       </div>
       <div className="header-item header-right">
-        <div className="login">
+        {user ? (
           <Button
             handleClick={() => {
-              navigate(ROUTER_PATH.LOGIN);
+              navigate(ROUTER_PATH.HOME);
             }}
           >
-            Sign in
+            {user.name}
           </Button>
-        </div>
+        ) : (
+          <div className="login">
+            <Button
+              handleClick={() => {
+                navigate(ROUTER_PATH.LOGIN);
+              }}
+            >
+              Sign in
+            </Button>
+          </div>
+        )}
         <div className="cart h-[48px]">
           <CartLogo className=""></CartLogo>
         </div>

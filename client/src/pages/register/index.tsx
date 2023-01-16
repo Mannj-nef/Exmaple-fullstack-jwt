@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../../components/button/Button";
 import Form from "../../components/form/Form";
@@ -8,8 +8,16 @@ import { ROUTER_PATH } from "../../routers/router";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState<{}>({ email: "" });
+  const [password, setPassword] = useState<{}>({
+    password: "",
+  });
   const handleRefister = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    const account = {
+      ...email,
+      ...password,
+    };
   };
   return (
     <>
@@ -27,8 +35,18 @@ const RegisterPage = () => {
         <p className="description">
           Sign up and start managing your candidates!
         </p>
-        <Input placeholder="Please enter your email address"></Input>
-        <Input placeholder="Please enter your password"></Input>
+        <Input
+          control={setEmail}
+          name="email"
+          placeholder="Please enter your email address"
+        ></Input>
+
+        <Input
+          type="password"
+          control={setPassword}
+          name="password"
+          placeholder="Please enter your password"
+        ></Input>
         <Button className="btn-register">Register</Button>
         <p className="title-bottom">
           <span

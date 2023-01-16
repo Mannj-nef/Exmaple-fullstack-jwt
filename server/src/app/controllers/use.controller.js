@@ -11,7 +11,7 @@ const useController = {
   getAll: async (req, res) => {
     try {
       const users = await userMongo.find({});
-      res.status(200).json({
+      return res.status(200).json({
         codeMessage: MESSAGE.SUCCESS,
         users,
       });
@@ -25,24 +25,24 @@ const useController = {
     const user = req.body;
     const { email, password } = user;
 
-    const userExist = await userMongo.find({ email });
-    if (userExist && userExist.length > 0) {
-      res.status(200).json({
-        codeMessage: MESSAGE.EXISTS_USER,
-      });
-      return;
-    }
-
-    const hashPassword = handleHashPassword(password);
-    userMongo.create({
-      ...user,
-      password: hashPassword,
-    });
-
-    res.status(200).json({
-      codeMessage: MESSAGE.SUCCESS,
-    });
     try {
+      const userExist = await userMongo.find({ email });
+      if (userExist && userExist.length > 0) {
+        res.status(200).json({
+          codeMessage: MESSAGE.EXISTS_USER,
+        });
+        return;
+      }
+
+      const hashPassword = handleHashPassword(password);
+      userMongo.create({
+        ...user,
+        password: hashPassword,
+      });
+
+      return res.status(200).json({
+        codeMessage: MESSAGE.SUCCESS,
+      });
     } catch (error) {
       res.status(500).json({ codeMessage: MESSAGE.SERVER_ERR });
     }
@@ -55,24 +55,26 @@ const useController = {
       const { email, password } = data;
 
       const user = await userMongo.findOne({ email });
-      const pass = handleComparePassword(password, user?.password);
+      const pass = user
+        ? handleComparePassword(password, user?.password)
+        : false;
 
       if (user && pass) {
         const { token, rfToken } = handleToken(user);
         res.cookie("rfToken", rfToken, { path: "/" });
 
         delete user._doc.password;
-        res.status(200).json({
+        return res.status(200).json({
           codeMessage: MESSAGE.SUCCESS,
           user,
           token,
         });
       } else if (!user) {
-        res.status(200).json({
+        return res.status(404).json({
           codeMessage: MESSAGE.ACCOUNT_NOT_EXISTS,
         });
       } else if (!pass) {
-        res.status(200).json({
+        return res.status(404).json({
           codeMessage: MESSAGE.WRONG_PASSWORD,
         });
       }
@@ -88,7 +90,7 @@ const useController = {
       const data = req.body;
 
       await userMongo.findByIdAndUpdate(id, data);
-      res.status(200).json({
+      return res.status(200).json({
         sodeMessage: MESSAGE.UPDATE_SUCCESS,
         data,
       });
@@ -102,7 +104,7 @@ const useController = {
     try {
       const { id } = req.params;
       // const user = await userMongo.findByIdAndDelete(id)
-      res.status(200).json({
+      return res.status(200).json({
         sodeMessage: MESSAGE.DELETE_SUCCESS,
         // user,
       });
