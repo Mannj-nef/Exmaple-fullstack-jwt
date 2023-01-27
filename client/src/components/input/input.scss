@@ -8,3 +8,13 @@
     outline: none;
     border: 1px solid var(--color-green);
 }
+
+.radio-input {
+    display: flex;
+    align-items: center;
+    label {
+        text-transform: capitalize;
+        margin-right: 10px;
+        font-weight: 500;
+    }
+}

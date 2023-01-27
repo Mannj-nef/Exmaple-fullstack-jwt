@@ -7,6 +7,7 @@ const router = Router();
 
 // [GET] /api/v1/users/
 router.get("/", middlewareAuthen.verifyToken, useController.getAll);
+// router.get("/:id", middlewareAuthen.verifyToken, useController.getAll);
 
 // [PORT] /api/v1/users/register
 router.post("/register", useController.register);

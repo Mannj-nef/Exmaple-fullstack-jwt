@@ -7,12 +7,13 @@ import { ROUTER_PATH } from "../../routers/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useEffect } from "react";
-import { getUser } from "../../redux/users/userSlice";
+import { getUser, setLogOut } from "../../redux/users/authSlice";
 
 const Header = () => {
-  const { user } = useSelector((state: RootState) => state.userSlice);
+  const { user } = useSelector((state: RootState) => state.authSlice);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
@@ -43,13 +44,21 @@ const Header = () => {
       </div>
       <div className="header-item header-right">
         {user ? (
-          <Button
-            handleClick={() => {
-              navigate(ROUTER_PATH.HOME);
-            }}
-          >
-            {user.name}
-          </Button>
+          <>
+            <Button
+              handleClick={() => {
+                navigate(ROUTER_PATH.HOME);
+              }}
+            >
+              {user.name}
+            </Button>
+            <Button
+              handleClick={() => dispatch(setLogOut())}
+              className="bg-orange-500"
+            >
+              Log out
+            </Button>
+          </>
         ) : (
           <div className="login">
             <Button

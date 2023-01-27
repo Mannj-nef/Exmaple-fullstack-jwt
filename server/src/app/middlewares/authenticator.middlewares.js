@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import MESSAGE from "../../configs/message.config.js";
 import { verifyToken } from "../utils/jwtUtil.js";
 

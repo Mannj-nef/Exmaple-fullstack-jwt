@@ -1,12 +1,12 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router";
 import Button from "../../components/button/Button";
 import Form from "../../components/form/Form";
 import Input from "../../components/input/Input";
 import LogoWeb from "../../components/logos/LogoWeb";
-import { getUser, setLogin } from "../../redux/users/userSlice";
+import { getUser, setLogin } from "../../redux/users/authSlice";
 import { ROUTER_PATH } from "../../routers/router";
 import { IAccount } from "../../interfaces";
 import LoginSuccess from "./LoginSuccess";
@@ -16,7 +16,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { user, loading } = useSelector((state: RootState) => state.userSlice);
+  const { user, loading, isLogin } = useSelector(
+    (state: RootState) => state.authSlice
+  );
 
   const navigate: NavigateFunction = useNavigate();
   const dispatch: React.Dispatch<AnyAction> = useDispatch();
@@ -27,7 +29,6 @@ const LoginPage = () => {
     const account: IAccount = { email, password };
     const payload = {
       ...account,
-      navigate,
     };
     dispatch(setLogin(payload));
   };
@@ -37,6 +38,12 @@ const LoginPage = () => {
     dispatch(getUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useLayoutEffect(() => {
+    if (isLogin) {
+      navigate(ROUTER_PATH.HOME);
+    }
+  }, [isLogin, navigate]);
 
   return (
     <>

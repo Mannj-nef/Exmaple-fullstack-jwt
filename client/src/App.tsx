@@ -1,5 +1,4 @@
 import { lazy, ReactNode, Suspense } from "react";
-import { useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import DefaultLayout from "./layouts/DefaultLayout";
 import LoginLayout from "./layouts/LoginLayout";
@@ -9,8 +8,6 @@ import "./style/App.scss";
 const Loading = lazy(() => import("./components/loading/Loading"));
 
 function App() {
-  // const { user } = useSelector((state) => state.useSlice);
-
   return (
     <div className="App">
       <Suspense fallback={<Loading />}>

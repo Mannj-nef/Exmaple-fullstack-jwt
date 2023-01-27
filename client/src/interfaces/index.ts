@@ -1,5 +1,3 @@
-import { NavigateFunction } from "react-router-dom";
-
 export interface IUser {
   _id: string;
   name: string;
@@ -20,7 +18,8 @@ export interface IAction {
   payload: any;
 }
 
-export interface iNavigate {
-  navigate: NavigateFunction;
+export interface IUserApi {
+  user?: IUser;
+  users?: IUser[] & void;
+  codeMessage: string;
 }
-export type actionLogin = IAccount & iNavigate;

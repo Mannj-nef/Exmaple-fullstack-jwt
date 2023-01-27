@@ -16,8 +16,10 @@
 
         .user-image {
             --size: 300px;
-            width: var(--size);
+            width: 100%;
             height: var(--size);
+            border-radius: 20px;
+            object-fit: cover;
         }
         .user-bottom {
             padding: 20px;
@@ -27,6 +29,27 @@
                 padding-left: var(--padding);
                 padding-right: var(--padding);
             }
+        }
+    }
+
+    .user-update {
+        --spack: 50px;
+        background-color: var(--white-color);
+        color: var(--text-color);
+        padding: var(--spack);
+        margin: var(--spack);
+        border-radius: 20px;
+
+        .title-update {
+            font-size: 30px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn-update-user {
+            display: block;
+            margin: auto;
+            margin-top: 30px;
         }
     }
 }

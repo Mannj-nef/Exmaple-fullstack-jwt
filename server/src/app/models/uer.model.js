@@ -9,7 +9,7 @@ const userShema = new Schema(
     name: { type: String, require: true },
     email: { type: String, require: true, unique: true, match: validateEmail },
     password: { type: String, require: true },
-    avataULR: { type: String },
+    avatarULR: { type: String },
     gender: { type: String, enum: [GENDER.FEMALE, GENDER.MALE], require: true },
     role: { type: String, enum: [ROLE.ADMIN, ROLE.USER], require: true },
   },
