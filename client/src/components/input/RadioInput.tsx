@@ -5,10 +5,17 @@ interface IRadioInput {
   name: string;
   value: string;
   className?: string;
+  isChecked?: boolean;
   control: Dispatch<SetStateAction<string>>;
 }
 
-const RadioInput = ({ className, value, name, control }: IRadioInput) => {
+const RadioInput = ({
+  className,
+  value,
+  name,
+  isChecked = false,
+  control,
+}: IRadioInput) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     control(value);
@@ -22,6 +29,7 @@ const RadioInput = ({ className, value, name, control }: IRadioInput) => {
         type="radio"
         value={value}
         id={value}
+        checked={isChecked}
       />
     </div>
   );

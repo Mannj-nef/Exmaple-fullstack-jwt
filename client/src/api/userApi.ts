@@ -1,4 +1,4 @@
-import { IUser } from "../interfaces";
+import { IUser, IUserApi } from "../interfaces";
 import axiosClient from "../utils/axiosClient";
 
 const UserApi = {
@@ -23,7 +23,7 @@ const UserApi = {
     const { data } = await axiosClient.post("/users/login", user);
     return data;
   },
-  register: async (user: { email: string; password: string }) => {
+  register: async (user: IUser) => {
     const { data } = await axiosClient.post("/users/register", user);
     return data;
   },
@@ -31,17 +31,21 @@ const UserApi = {
     id: string,
     user: IUser,
     token: string
-  ): Promise<IUser> => {
+  ): Promise<IUserApi> => {
     const { data } = await axiosClient.put(`users/${id}`, user, {
       headers: {
-        token: `Bearer ${token}}`,
+        token: `Bearer ${token}`,
       },
     });
     return data;
   },
-  deleteUser: async (id: string) => {
-    const codeMessage = await axiosClient.delete(`users/${id}`);
-    return codeMessage;
+  deleteUser: async (id: string, token: string) => {
+    const { data } = await axiosClient.delete(`users/${id}`, {
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
+    return data;
   },
 };
 

@@ -8,6 +8,7 @@ interface IInitialState {
   errorLogin: boolean;
   account: IAccount;
   isLogin: boolean;
+  isRegister: boolean;
   token: string;
 }
 
@@ -16,6 +17,7 @@ const initialState: IInitialState = {
   user: null,
   loading: false,
   isLogin: false,
+  isRegister: false,
   errorLogin: false,
   token:
     // @ts-ignore
@@ -34,20 +36,17 @@ const authSlice = createSlice({
     setLoading: (state: IInitialState, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setLogin: (state: IInitialState, action: PayloadAction<IAccount>) => {
+    register: (state: IInitialState, action: PayloadAction<IAccount>) => {
       const { email, password } = action.payload;
 
       state.account = { email, password };
     },
-    setLogOut: (state: IInitialState) => {
-      state.isLogin = false;
+    registerSuccess: (state: IInitialState) => {
+      state.isRegister = true;
     },
-    setLogOutSuccess: (state: IInitialState) => {
-      localStorage.removeItem(KEY.localStorage_user);
-      localStorage.removeItem(KEY.localStorage_accessToken);
-      state.account = { email: "", password: "" };
-      state.user = null;
-      state.token = "";
+    setLogin: (state: IInitialState, action: PayloadAction<IAccount>) => {
+      const { email, password } = action.payload;
+      state.account = { email, password };
     },
     setLoginSuccess: (
       state: IInitialState,
@@ -62,14 +61,32 @@ const authSlice = createSlice({
       state.errorLogin = false;
       state.isLogin = true;
       state.token = token;
+      state.account = { email: "", password: "" };
     },
-    setLoginFailure: (state: IInitialState) => {
+    setLogOut: (state: IInitialState) => {
+      state.isLogin = false;
+    },
+    setLogOutSuccess: (state: IInitialState) => {
+      localStorage.removeItem(KEY.localStorage_user);
+      localStorage.removeItem(KEY.localStorage_accessToken);
+      state.account = { email: "", password: "" };
+      state.user = null;
+      state.token = "";
+    },
+    failed: (state: IInitialState) => {
       state.errorLogin = true;
+      state.account = { email: "", password: "" };
+      state.user = null;
+      state.loading = false;
+      state.isLogin = false;
+      state.errorLogin = false;
+      state.isRegister = false;
     },
   },
 });
 export const { setLogin, getUser, setLogOut } = authSlice.actions;
 export const { setLoading, setLogOutSuccess } = authSlice.actions;
-export const { setLoginSuccess, setLoginFailure } = authSlice.actions;
+export const { setLoginSuccess, failed } = authSlice.actions;
+export const { register, registerSuccess } = authSlice.actions;
 
 export default authSlice.reducer;

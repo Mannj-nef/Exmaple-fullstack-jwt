@@ -35,10 +35,20 @@ const Header = () => {
       <div className="header-item">
         <ul className="menu">
           <li className="menu-item">
-            <NavLink to="/">Home</NavLink>
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? "menu-active" : "")}
+            >
+              Home
+            </NavLink>
           </li>
           <li className="menu-item">
-            <NavLink to="/user">Users</NavLink>
+            <NavLink
+              to="/user"
+              className={({ isActive }) => (isActive ? "menu-active" : "")}
+            >
+              Users
+            </NavLink>
           </li>
         </ul>
       </div>

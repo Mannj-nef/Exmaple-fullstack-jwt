@@ -4,14 +4,16 @@ import { takeLatest, all, put, call } from "redux-saga/effects";
 import UserApi from "../../api/userApi";
 import { TOAST_TYPE } from "../../configs/constants";
 import message from "../../configs/message";
-import { IAccount } from "../../interfaces";
+import { IAccount, IAction, IUser, IUserApi } from "../../interfaces";
 import {
   setLoading,
   setLogin,
-  setLoginFailure,
+  failed,
   setLoginSuccess,
   setLogOut,
   setLogOutSuccess,
+  register,
+  registerSuccess,
 } from "../users/authSlice";
 import { clearUser } from "../users/userSlice";
 
@@ -34,12 +36,33 @@ function* handleLoginUser(action: PayloadAction<IAccount>): any {
 
     yield put(setLoading(false));
   } catch (error) {
-    console.log(error);
-
-    yield put(setLoginFailure());
+    yield put(failed());
     yield put(setLoading(false));
 
     toast.error(message.LOGIN_FAILURE, TOAST_TYPE);
+  }
+}
+
+function* handleRegister(action: IAction) {
+  const { email, password, ...restUser } = action.payload;
+  yield put(setLoading(true));
+
+  const user: IUser = {
+    ...restUser,
+    email,
+    password,
+  };
+
+  try {
+    const response: IUserApi = yield call(UserApi.register, user);
+    yield put(registerSuccess());
+    toast.success(response.codeMessage, TOAST_TYPE);
+
+    yield put(setLoading(false));
+  } catch (error: any) {
+    yield put(setLoading(false));
+    toast.error(error.response.data.codeMessage, TOAST_TYPE);
+    yield put(failed());
   }
 }
 
@@ -50,7 +73,7 @@ function* handleLogOut() {
     yield put(clearUser());
     yield put(setLoading(false));
   } catch (error) {
-    yield put(setLoginFailure());
+    yield put(failed());
     yield put(setLoading(false));
   }
 }
@@ -61,9 +84,12 @@ function* watchLogin() {
 function* watchLogOut() {
   yield takeLatest(setLogOut, handleLogOut);
 }
+function* watchRegister() {
+  yield takeLatest(register, handleRegister);
+}
 
 function* watchAuth() {
-  yield all([watchLogin(), watchLogOut()]);
+  yield all([watchLogin(), watchLogOut(), watchRegister()]);
 }
 
 export default watchAuth;

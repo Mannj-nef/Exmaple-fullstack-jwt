@@ -12,6 +12,7 @@ middlewareAuthor.verifyToken = (req, res, next) => {
   } else {
     try {
       const user = verify(token);
+      console.log(token);
 
       if (!user) return errorStatus(res);
 

@@ -9,7 +9,7 @@ import "./user.scss";
 
 const UsersPage = () => {
   const { token } = useSelector((state: RootState) => state.authSlice);
-  const { users, isUpdateUser } = useSelector(
+  const { users, isUpdateUser, userIsChange } = useSelector(
     (state: RootState) => state.userSlice
   );
 
@@ -17,7 +17,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     dispatch(getAllUser(token));
-  }, [dispatch, token]);
+  }, [dispatch, token, userIsChange]);
 
   useEffect(() => {
     document.title = "Users Page";

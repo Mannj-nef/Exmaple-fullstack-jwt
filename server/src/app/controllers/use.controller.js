@@ -4,13 +4,18 @@ import {
   handleComparePassword,
   handleHashPassword,
 } from "../utils/handlePassword.js";
-import { accessToken, handleToken, refreshToken } from "../utils/jwtUtil.js";
+import { handleToken } from "../utils/jwtUtil.js";
 
 const useController = {
   // [GET] /api/v1/users/
   getAll: async (req, res) => {
     try {
       const users = await userMongo.find({});
+
+      users.forEach((user) => {
+        user.password = "***";
+      });
+
       return res.status(200).json({
         codeMessage: MESSAGE.SUCCESS,
         users,
@@ -28,7 +33,7 @@ const useController = {
     try {
       const userExist = await userMongo.find({ email });
       if (userExist && userExist.length > 0) {
-        res.status(200).json({
+        res.status(400).json({
           codeMessage: MESSAGE.EXISTS_USER,
         });
         return;
@@ -89,10 +94,19 @@ const useController = {
       const { id } = req.params;
       const data = req.body;
 
-      await userMongo.findByIdAndUpdate(id, data);
+      const hashPassword = handleHashPassword(data.password);
+
+      const newUser = {
+        ...data,
+        password: hashPassword,
+      };
+
+      await userMongo.findByIdAndUpdate(id, newUser);
+      delete newUser.password;
+
       return res.status(200).json({
         sodeMessage: MESSAGE.UPDATE_SUCCESS,
-        data,
+        user: newUser,
       });
     } catch (error) {
       res.status(500).json({ codeMessage: MESSAGE.SERVER_ERR });
@@ -105,7 +119,7 @@ const useController = {
       const { id } = req.params;
       // const user = await userMongo.findByIdAndDelete(id)
       return res.status(200).json({
-        sodeMessage: MESSAGE.DELETE_SUCCESS,
+        codeMessage: MESSAGE.DELETE_SUCCESS,
         // user,
       });
     } catch (error) {

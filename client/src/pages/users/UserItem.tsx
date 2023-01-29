@@ -2,7 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/button/Button";
 import { RootState } from "../../redux/store";
-import { getUserById, isOpenModalUpdate } from "../../redux/users/userSlice";
+import {
+  deleteUser,
+  getUserById,
+  isOpenModalUpdate,
+} from "../../redux/users/userSlice";
 
 interface user {
   _id: string;
@@ -25,7 +29,9 @@ const UserItem = ({ user }: Iuser) => {
     dispatch(getUserById(id));
     dispatch(isOpenModalUpdate(true));
   };
-  const handleDeleteUser = () => {};
+  const handleDeleteUser = (id: string) => {
+    dispatch(deleteUser(id));
+  };
 
   return (
     <div className="user-item">
@@ -44,7 +50,10 @@ const UserItem = ({ user }: Iuser) => {
           >
             Update
           </Button>
-          <Button className="bg-red-500" handleClick={handleDeleteUser}>
+          <Button
+            className="bg-red-500"
+            handleClick={() => handleDeleteUser(user._id)}
+          >
             Delete
           </Button>
         </div>

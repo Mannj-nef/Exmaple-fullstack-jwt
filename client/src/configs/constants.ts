@@ -11,6 +11,11 @@ interface IToastType {
   theme: string;
 }
 
+interface Role_type {
+  ADMIN: string;
+  USER: string;
+}
+
 export const TOAST_TYPE: ToastOptions<IToastType> = {
   position: "top-right",
   autoClose: 2000,
@@ -20,4 +25,9 @@ export const TOAST_TYPE: ToastOptions<IToastType> = {
   draggable: true,
   progress: undefined,
   theme: "light",
+};
+
+export const ROLE_TYPE: Role_type = {
+  ADMIN: "admin",
+  USER: "user",
 };
